@@ -31,6 +31,8 @@ def win(choice):
             return f'{gesture[0]}\nI won'
         elif choice == gesture[2] and bot_choice == gesture[1]:
             return f'{gesture[1]}\nYou won'
+    else:
+        return 'Error'
 
 
 @bot.message_handler(commands=['start'])
@@ -52,7 +54,10 @@ def handle_message(message):
     button3 = types.KeyboardButton('✊')
     keyboard.add(button1, button2, button3)
     won = win(message.text)
-    bot.reply_to(message, f"{won}\nRock Paper Scissors - One Two Three", reply_markup=keyboard)
+    if won == 'Error':
+        bot.reply_to(message, f"Choose one of the options", reply_markup=keyboard)
+    else:
+        bot.reply_to(message, f"{won}\nRock Paper Scissors - One Two Three", reply_markup=keyboard)
 
 
 bot.polling()
