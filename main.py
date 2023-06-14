@@ -11,7 +11,7 @@ bot = telebot.TeleBot(bot_token)
 
 @bot.message_handler(commands=['/start'])
 def start_message(message):
-    if db.check_user(message.from_user.username):
+    if not db.check_user(message.from_user.username):
         db.add_user(message.from_user.username)
     bot.send_message(message, f"Hello {message.from_user.first_name}. Let's play a game of 'Rock, Paper, Scissors'")
     keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, one_time_keyboard=True)
@@ -25,6 +25,8 @@ def start_message(message):
 
 @bot.message_handler()
 def handle_message(message):
+    if not db.check_user(message.from_user.username):
+        db.add_user(message.from_user.username)
     keyboard = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True, one_time_keyboard=True)
     button1 = types.KeyboardButton('🖐')
     button2 = types.KeyboardButton('✌')
